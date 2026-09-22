@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\DebugBar\Tests;
+namespace Ikoss\Mezzio\DebugBar\Tests;
 
 use DebugBar\DebugBar;
 use DebugBar\DebugBarException;
+use Ikoss\Mezzio\DebugBar\OpenHandler;
+use Ikoss\Mezzio\DebugBar\Tests\Storage\MockStorage;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Diactoros\ServerRequest;
-use Mezzio\DebugBar\OpenHandler;
-use Mezzio\DebugBar\Tests\Storage\MockStorage;
 use PHPUnit\Framework\TestCase;
 
 class OpenHandlerTest extends TestCase

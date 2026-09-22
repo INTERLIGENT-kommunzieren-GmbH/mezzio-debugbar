@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\DebugBar\Tests;
+namespace Ikoss\Mezzio\DebugBar\Tests;
 
 use DebugBar\Bridge\Doctrine\DoctrineCollector;
 use DebugBar\DataCollector\ConfigCollector;
 use DebugBar\DebugBar;
 use DebugBar\Storage\FileStorage;
 use DebugBar\Storage\PdoStorage;
-use Mezzio\DebugBar\ConfigProvider;
-use Mezzio\DebugBar\DebugBarMiddleware;
-use Mezzio\DebugBar\OpenHandler;
-use Mezzio\DebugBar\Storage\DoctrineStorage;
+use Ikoss\Mezzio\DebugBar\ConfigProvider;
+use Ikoss\Mezzio\DebugBar\DebugBarMiddleware;
+use Ikoss\Mezzio\DebugBar\OpenHandler;
+use Ikoss\Mezzio\DebugBar\Storage\DoctrineStorage;
 use PHPUnit\Framework\TestCase;
 
 class ConfigProviderTest extends TestCase

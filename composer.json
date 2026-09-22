@@ -44,12 +44,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Mezzio\\DebugBar\\": "src/"
+            "Ikoss\\Mezzio\\DebugBar\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Mezzio\\DebugBar\\Tests\\": "tests/"
+            "Ikoss\\Mezzio\\DebugBar\\Tests\\": "tests/"
         }
     },
     "config": {

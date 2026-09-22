@@ -31,7 +31,7 @@ use Laminas\Stdlib\ArrayUtils;
 
 $aggregator = new ConfigAggregator(
     [
-        Mezzio\DebugBar\ConfigProvider::class,
+        Ikoss\Mezzio\DebugBar\ConfigProvider::class,
     ]
 );
 return ArrayUtils::merge(

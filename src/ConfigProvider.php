@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\DebugBar;
+namespace Ikoss\Mezzio\DebugBar;
 
 use DebugBar\Bridge\Doctrine\DebugBarSQLMiddleware;
 use DebugBar\Bridge\Doctrine\DoctrineCollector;
@@ -10,14 +10,14 @@ use DebugBar\DataCollector\ConfigCollector;
 use DebugBar\DebugBar;
 use DebugBar\Storage\FileStorage;
 use DebugBar\Storage\PdoStorage;
-use Mezzio\DebugBar\DataCollector\ConfigCollectorFactory;
-use Mezzio\DebugBar\DataCollector\DoctrineCollectorFactory;
-use Mezzio\DebugBar\DataCollector\RouteCollector;
-use Mezzio\DebugBar\DataCollector\RouteCollectorFactory;
-use Mezzio\DebugBar\Storage\DoctrineStorage;
-use Mezzio\DebugBar\Storage\DoctrineStorageFactory;
-use Mezzio\DebugBar\Storage\FileStorageFactory;
-use Mezzio\DebugBar\Storage\PdoStorageFactory;
+use Ikoss\Mezzio\DebugBar\DataCollector\ConfigCollectorFactory;
+use Ikoss\Mezzio\DebugBar\DataCollector\DoctrineCollectorFactory;
+use Ikoss\Mezzio\DebugBar\DataCollector\RouteCollector;
+use Ikoss\Mezzio\DebugBar\DataCollector\RouteCollectorFactory;
+use Ikoss\Mezzio\DebugBar\Storage\DoctrineStorage;
+use Ikoss\Mezzio\DebugBar\Storage\DoctrineStorageFactory;
+use Ikoss\Mezzio\DebugBar\Storage\FileStorageFactory;
+use Ikoss\Mezzio\DebugBar\Storage\PdoStorageFactory;
 
 final class ConfigProvider
 {
