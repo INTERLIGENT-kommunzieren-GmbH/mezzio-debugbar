@@ -35,18 +35,25 @@ Please try to be as detailed as possible in your report. Include specific inform
 
 Good pull requests – patches, improvements, new features – are a fantastic help. Before create a pull request, please follow these instructions:
 
-* The code must follow the [PSR-2 Coding Standard](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md). Run `composer cs-fix` to fix your code before commit.
+* The code must follow the [Laminas Coding Standard](https://github.com/laminas/laminas-coding-standard). Run `composer cs-fix` to fix your code before commit, and `composer cs-check` to verify it.
+* The code must pass static analysis: `composer phpstan`.
 * Write tests
 * Document any change in `README.md` and `CHANGELOG.md`
 * One pull request per feature. If you want to do more than one thing, send multiple pull request
 
-### Runing tests
+### Running tests
 
 ```sh
 composer test
 ```
 
-To get code coverage information execute the following comand:
+To run the coding standard, static analysis and tests in one go:
+
+```sh
+composer check
+```
+
+To get code coverage information execute the following command:
 
 ```sh
 composer coverage

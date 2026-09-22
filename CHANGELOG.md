@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Changed
+- Package renamed from `mostafasy/mezzio-debugbar` to `ik-oss/mezzio-debugbar`; maintenance moved
+  to INTERLIGENT kommunizieren GmbH after the upstream project was abandoned.
+- Minimum PHP version raised to 8.5.
+- Test suite upgraded to PHPUnit 12 (`returnValueMap()` replaced by `willReturnMap()`, mocks
+  without expectations replaced by stubs, dynamic properties declared).
+- Dev dependencies upgraded: laminas-coding-standard 3, PHPStan 2, laminas-diactoros 3.
+- CI workflow rewritten for PHP 8.5; now also runs PHPStan and a `--prefer-lowest` job.
+
+### Added
+- `phpstan.neon.dist`, so the existing `composer phpstan` script actually has a configuration.
+
+### Fixed
+- `MonologCollectorFactory` and `SymfonyMailCollectorFactory` were committed without a `.php`
+  extension and could never be autoloaded.
+- `DoctrineStorage` passed parameters to `Statement::executeStatement()`/`executeQuery()`, which
+  is not supported from doctrine/dbal 3 onwards; it now binds them via the connection.
+- `RouteCollector` redeclared `$useHtmlVarDumper`, `useHtmlVarDumper()` and
+  `isHtmlVarDumperUsed()`, which are already provided by `DebugBar\DataFormatter\HasDataFormatter`.
+
 ## [2.1.0] - 2021-07-10
 ### Added
 - New option `renderOptions` [#12].

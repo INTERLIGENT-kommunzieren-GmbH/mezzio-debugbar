@@ -7,6 +7,7 @@ namespace Mezzio\DebugBar;
 use DebugBar\DebugBar as Bar;
 use DebugBar\JavascriptRenderer;
 use DebugBar\Storage\FileStorage;
+use DirectoryIterator;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -16,7 +17,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 use function file_exists;
 use function file_get_contents;
+use function filemtime;
 use function in_array;
+use function is_dir;
+use function is_file;
+use function is_readable;
 use function ob_get_clean;
 use function ob_start;
 use function pathinfo;
@@ -27,6 +32,9 @@ use function strpos;
 use function strripos;
 use function strtolower;
 use function substr;
+use function time;
+use function touch;
+use function unlink;
 
 use const PATHINFO_EXTENSION;
 use const PHP_SESSION_ACTIVE;
@@ -134,7 +142,7 @@ class DebugBarMiddleware implements MiddlewareInterface
     private function disableDebugBar(ServerRequestInterface $request, ResponseInterface $response): bool
     {
         $disableByConfig       = $this->debugBarConfig['disable'] ?? false;
-        $disableHeaderValue    = $request->getHeaderLine(self::DISABLE_KEY) ?? false;
+        $disableHeaderValue    = $request->getHeaderLine(self::DISABLE_KEY);
         $disableCookieValue    = $request->getCookieParams()[self::DISABLE_KEY] ?? false;
         $disableAttributeValue = $request->getAttribute(self::DISABLE_KEY, '') ?? false;
         $isDownload            = strpos($response->getHeaderLine('Content-Disposition'), 'attachment;') !== false;
@@ -267,41 +275,41 @@ class DebugBarMiddleware implements MiddlewareInterface
     {
         return in_array($response->getStatusCode(), [302, 301]);
     }
+
     private function maybeCleanupStorage(): void
     {
         $interval = $this->debugBarConfig[ 'storage_cleanup_interval' ] ?? 900;
-        $ttl = $this->debugBarConfig[ 'storage_ttl' ] ?? 900;
-        $storage = $this->debugBar->getStorage();
+        $ttl      = $this->debugBarConfig[ 'storage_ttl' ] ?? 900;
+        $storage  = $this->debugBar->getStorage();
 
-        if ( ! $storage instanceof FileStorage ) {
+        if (! $storage instanceof FileStorage) {
             return;
         }
-        $dir = $this->debugBarConfig[ 'storage_dir' ] ?? null ;
+        $dir = $this->debugBarConfig[ 'storage_dir' ] ?? null;
 
-        if (!$dir || !is_dir($dir) || !is_readable($dir)) {
+        if (! $dir || ! is_dir($dir) || ! is_readable($dir)) {
             return;
         }
         $marker = $dir . '/.last_cleanup';
 
-        $last = is_file( $marker ) ? filemtime( $marker ) : 0;
+        $last = is_file($marker) ? filemtime($marker) : 0;
 
-        if ( time() - $last < (int) $interval ) {
+        if (time() - $last < (int) $interval) {
             return;
         }
-        foreach ( new \DirectoryIterator( $dir ) as $file ) {
-            if ( $file->isDot() || ! $file->isFile() ) {
+        foreach (new DirectoryIterator($dir) as $file) {
+            if ($file->isDot() || ! $file->isFile()) {
                 continue;
             }
 
-            if ( $file->getExtension() !== 'json' ) {
+            if ($file->getExtension() !== 'json') {
                 continue;
             }
 
-            if ( time() - $file->getMTime() > $ttl ) {
-                @unlink( $file->getPathname() );
+            if (time() - $file->getMTime() > $ttl) {
+                @unlink($file->getPathname());
             }
         }
-        @touch( $marker );
+        @touch($marker);
     }
 }
-

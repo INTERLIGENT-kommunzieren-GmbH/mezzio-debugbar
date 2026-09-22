@@ -20,10 +20,6 @@ class RouteCollector extends DataCollector implements Renderable, AssetProvider
 
     protected RouterInterface $router;
 
-    // The HTML var dumper requires debug bar users to support the new inline assets, which not all
-    // may support yet - so return false by default for now.
-    protected $useHtmlVarDumper = false;
-
     public function __construct(RouterInterface $router, array $config)
     {
         $this->router = $router;
@@ -31,10 +27,6 @@ class RouteCollector extends DataCollector implements Renderable, AssetProvider
         $this->name   = 'Route';
     }
 
-
-    /**
-     * @return array
-     */
     public function collect(): array
     {
         $data = $this->getRouteInformation();
@@ -100,29 +92,5 @@ class RouteCollector extends DataCollector implements Renderable, AssetProvider
                 "default" => "{}",
             ],
         ];
-    }
-
-    /**
-     * Sets a flag indicating whether the Symfony HtmlDumper will be used to dump variables for
-     * rich variable rendering.
-     *
-     * @param bool $value
-     * @return $this
-     */
-    public function useHtmlVarDumper($value = true): RouteCollector
-    {
-        $this->useHtmlVarDumper = $value;
-        return $this;
-    }
-
-    /**
-     * Indicates whether the Symfony HtmlDumper will be used to dump variables for rich variable
-     * rendering.
-     *
-     * @return mixed
-     */
-    public function isHtmlVarDumperUsed()
-    {
-        return $this->useHtmlVarDumper;
     }
 }

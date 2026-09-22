@@ -1,23 +1,23 @@
-
--forked from : https://github.com/middlewares/debugbar
-
--forked from : https://github.com/php-middleware/phpdebugbar
-
-# mezzio/debugbar
+# ik-oss/mezzio-debugbar
 
 [![Software License][ico-license]](LICENSE)
-![Testing][ico-ga]
-[![Total Downloads][ico-downloads]][link-downloads]
+[![CI][ico-ga]][link-ga]
 
-Middleware to insert [PHP DebugBar](http://phpdebugbar.com) automatically in html responses for Mezzio Framwork.
+Middleware to insert [PHP DebugBar](https://php-debugbar.com) automatically in html responses for the Mezzio framework.
+
+Maintained by [INTERLIGENT kommunizieren GmbH][link-org]. This is a fork of
+[mostafasy/mezzio-debugbar](https://github.com/mostafasy/mezzio-debugbar), which is no longer
+maintained; that package is in turn a fork of
+[php-middleware/phpdebugbar](https://github.com/php-middleware/phpdebugbar) and
+[middlewares/debugbar](https://github.com/middlewares/debugbar).
 
 ## Requirements
 
-* PHP >= 7.4
+* PHP 8.5
 
 ## Installation
 ```
-composer require --dev mostafasy/mezzio-debugbar 
+composer require --dev ik-oss/mezzio-debugbar
 ```
 ## Example
 
@@ -93,7 +93,7 @@ please note you have to execute sql schema [pdo-sql-Schema]
 
 ## Doctrine Storage
 
-It will collect data and saved to database by using Doctine you can configure as :   
+It will collect data and saved to database by using Doctrine you can configure as :   
 ```
 'storage'    => DoctrineStorage::class,
   'doctrine_storage'=>[
@@ -103,6 +103,18 @@ It will collect data and saved to database by using Doctine you can configure as
 
 ```
 you have to execute sql schema: [doctrine-sql-Schema]
+
+`DoctrineStorage` works with both `doctrine/dbal` 3 and 4.
+
+---
+
+## Doctrine Collector
+
+> **Note**
+> The Doctrine collector on this branch relies on `Doctrine\DBAL\Logging\DebugStack`, which was
+> removed in `doctrine/dbal` 4. It therefore requires `doctrine/dbal` ^3. Upstream's `2.0.x` branch
+> (preserved in this repository) reimplements the collector on top of
+> `php-debugbar/doctrine-bridge` for DBAL 4; it has not been merged into `master` yet.
 
 ---
 
@@ -149,12 +161,10 @@ Please see [CHANGELOG](CHANGELOG.md) for more information about recent changes a
 
 The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/middlewares/debugbar.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-ga]: https://github.com/middlewares/debugbar/workflows/testing/badge.svg
-[ico-downloads]: https://img.shields.io/packagist/dt/middlewares/debugbar.svg?style=flat-square
+[ico-ga]: https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar/actions/workflows/ci.yml/badge.svg
 
-[link-packagist]: https://packagist.org/packages/mostafasy/mezzio-debugbar
-[link-downloads]: https://packagist.org/packages/mostafasy/mezzio-debugbar
-[pdo-sql-Schema]:https://github.com/mostafasy/mezzio-debugbar/blob/master/src/Storage/DatabaseSchemaSql/pdo_storge_sql_schema.sql
-[doctrine-sql-Schema]:https://github.com/mostafasy/mezzio-debugbar/blob/master/src/Storage/DatabaseSchemaSql/doctrine_storge_sql_schema.sql
+[link-ga]: https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar/actions/workflows/ci.yml
+[link-org]: https://github.com/INTERLIGENT-kommunzieren-GmbH
+[pdo-sql-Schema]: https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar/blob/master/src/Storage/DatabaseSchemaSql/pdo_storge_sql_schema.sql
+[doctrine-sql-Schema]: https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar/blob/master/src/Storage/DatabaseSchemaSql/doctrine_storge_sql_schema.sql

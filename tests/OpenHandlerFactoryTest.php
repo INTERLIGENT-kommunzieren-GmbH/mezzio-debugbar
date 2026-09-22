@@ -21,7 +21,7 @@ class OpenHandlerFactoryTest extends TestCase
 
     public function setUp(): void
     {
-        $this->debugbar = $this->createMock(DebugBar::class);
+        $this->debugbar = $this->createStub(DebugBar::class);
 
         $this->storage = new MockStorage(['storage' => ['__meta' => ['id' => 'Xstorage']]]);
     }
@@ -30,17 +30,17 @@ class OpenHandlerFactoryTest extends TestCase
     {
         $this->expectException(DebugBarException::class);
 
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container
             ->method('has')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [DebugBar::class, true],
-            ]));
+            ]);
         $container
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [DebugBar::class, $this->debugbar],
-            ]));
+            ]);
 
         $factory     = new OpenHandlerFactory();
         $openHandler = $factory($container);
@@ -48,19 +48,19 @@ class OpenHandlerFactoryTest extends TestCase
 
     public function testFactory(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $debugBar  = (new StandardDebugBar())->setStorage($this->storage);
         $container
             ->method('has')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [DebugBar::class, true],
-            ]));
+            ]);
 
         $container
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [DebugBar::class, $debugBar],
-            ]));
+            ]);
 
         $factory     = new OpenHandlerFactory();
         $openHandler = $factory($container);

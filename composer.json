@@ -1,5 +1,5 @@
 {
-    "name": "mostafasy/mezzio-debugbar",
+    "name": "ik-oss/mezzio-debugbar",
     "type": "library",
     "description": "Middleware to insert PHP DebugBar automatically in html responses",
     "license": "MIT",
@@ -9,31 +9,41 @@
         "middleware",
         "server",
         "http",
-        "debugbar"
+        "debugbar",
+        "mezzio"
     ],
-    "homepage": "https://github.com/mostafasy/mezzio-debugbar",
+    "homepage": "https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar",
     "support": {
-        "issues": "https://github.com/mostafasy/mezzio-debugbar"
+        "issues": "https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar/issues",
+        "source": "https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar"
     },
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "~8.5.0",
         "php-debugbar/php-debugbar": "^2.2",
-        "laminas/laminas-diactoros": "^2.3 || ^3.6",
+        "laminas/laminas-diactoros": "^3.6",
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0",
         "psr/container": "^1.0 || ^2.0",
-        "psr/http-message": "^1.0",
+        "psr/http-message": "^1.0 || ^2.0",
         "psr/http-factory": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8|^9",
-        "laminas/laminas-coding-standard": "~2.5.0",
-        "friendsofphp/php-cs-fixer": "^2.0",
-        "squizlabs/php_codesniffer": "^3.0",
-        "phpstan/phpstan": "^0.12",
-        "laminas/laminas-config-aggregator": "^1.0",
-        "mezzio/mezzio": "^3.0",
-        "doctrine/orm": "^2.7"
+        "doctrine/dbal": "^3.10",
+        "doctrine/orm": "^2.20",
+        "laminas/laminas-coding-standard": "^3.0",
+        "laminas/laminas-config-aggregator": "^1.14",
+        "mezzio/mezzio": "^3.20",
+        "mezzio/mezzio-router": "^3.17",
+        "monolog/monolog": "^3.8",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^11.5 || ^12.0",
+        "symfony/mailer": "^6.4 || ^7.2"
+    },
+    "suggest": {
+        "doctrine/orm": "To use the Doctrine storage; the Doctrine collector additionally requires doctrine/dbal ^3 (see README)",
+        "monolog/monolog": "To use the Monolog collector",
+        "symfony/mailer": "To use the Symfony mailer collector",
+        "mezzio/mezzio-router": "To use the route collector"
     },
     "autoload": {
         "psr-4": {
@@ -45,7 +55,18 @@
             "Mezzio\\DebugBar\\Tests\\": "tests/"
         }
     },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
     "scripts": {
+        "check": [
+            "@cs-check",
+            "@phpstan",
+            "@test"
+        ],
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "phpstan": "phpstan analyse",

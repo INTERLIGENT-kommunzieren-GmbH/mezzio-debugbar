@@ -17,14 +17,16 @@ class DebugBarMiddlewareTest extends TestCase
 {
     protected DebugBar $debugbar;
     protected DebugBarMiddleware $middleware;
+    protected ResponseFactory $responseFactory;
+    protected StreamFactory $streamFactory;
+    protected array $config;
 
     protected function setUp(): void
     {
-        $this->debugbar         = $this->createMock(DebugBar::class);
-        $this->debugbarRenderer = $this->debugbar->getJavascriptRenderer();
-        $this->responseFactory  = new ResponseFactory();
-        $this->streamFactory    = new StreamFactory();
-        $this->config           = [
+        $this->debugbar        = $this->createStub(DebugBar::class);
+        $this->responseFactory = new ResponseFactory();
+        $this->streamFactory   = new StreamFactory();
+        $this->config          = [
             'disable'             => false,
             'captureAjax'         => true,
             'inline'              => false,
@@ -39,7 +41,7 @@ class DebugBarMiddlewareTest extends TestCase
             ],
             'storage'             => null,
         ];
-        $this->middleware       = new DebugBarMiddleware(
+        $this->middleware      = new DebugBarMiddleware(
             new DebugBar(),
             $this->responseFactory,
             $this->streamFactory,

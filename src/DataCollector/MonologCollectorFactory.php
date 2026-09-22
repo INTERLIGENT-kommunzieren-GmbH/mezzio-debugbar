@@ -9,6 +9,8 @@ use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 
+use function sprintf;
+
 final class MonologCollectorFactory
 {
     public function __invoke(ContainerInterface $container): MonologCollector
@@ -41,9 +43,9 @@ final class MonologCollectorFactory
 
         return new MonologCollector(
             $logger,
-            $config['level']  ?? Logger::DEBUG,
+            $config['level'] ?? Logger::DEBUG,
             $config['bubble'] ?? true,
-            $config['name']   ?? 'monolog'
+            $config['name'] ?? 'monolog'
         );
     }
 }

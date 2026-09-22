@@ -39,22 +39,23 @@ class DoctrineStorage extends PdoStorage
     /**
      * {@inheritdoc}
      *
+     * @param string $id
+     * @param array<string, mixed> $data
      * @throws Exception
      */
     public function save($id, $data)
     {
-        $sql  = $this->getSqlQuery('save');
-        $stmt = $this->entityManager->getConnection()->prepare($sql);
-        $meta = $data[ '__meta' ];
-        $stmt->executeStatement(
+        $meta = $data['__meta'];
+        $this->entityManager->getConnection()->executeStatement(
+            $this->getSqlQuery('save'),
             [
                 $id,
                 serialize($data),
-                $meta[ 'utime' ],
-                $meta[ 'datetime' ],
-                $meta[ 'uri' ],
-                $meta[ 'ip' ],
-                $meta[ 'method' ],
+                $meta['utime'],
+                $meta['datetime'],
+                $meta['uri'],
+                $meta['ip'],
+                $meta['method'],
             ]
         );
         if ($this->saveSqlQueriesToExtraTable) {
@@ -71,15 +72,14 @@ class DoctrineStorage extends PdoStorage
             return;
         }
         foreach ($statements as $statement) {
-            $sql  = $this->getSqlQuery('extra_table');
-            $stmt = $this->entityManager->getConnection()->prepare($sql);
-            $stmt->executeStatement(
+            $this->entityManager->getConnection()->executeStatement(
+                $this->getSqlQuery('extra_table'),
                 [
                     $requestId,
                     $statement['sql'],
                     serialize($statement['params']),
-                    $statement[ 'duration' ],
-                    $statement[ 'duration_str' ],
+                    $statement['duration'],
+                    $statement['duration_str'],
                 ]
             );
         }
@@ -88,17 +88,21 @@ class DoctrineStorage extends PdoStorage
     /**
      * {@inheritdoc}
      *
+     * @param string $id
+     * @return array<string, mixed>|null
      * @throws Exception
      */
     public function get($id)
     {
-        $sql  = $this->getSqlQuery('get');
-        $stmt = $this->entityManager->getConnection()->prepare($sql);
-        $res  = $stmt->executeQuery([$id]);
-        $data = $res->fetchFirstColumn();
-        if (is_string($data[0] ?? null)) {
-            return unserialize($data[0]);
+        $data = $this->entityManager->getConnection()
+            ->executeQuery($this->getSqlQuery('get'), [$id])
+            ->fetchFirstColumn();
+
+        $serialized = $data[0] ?? null;
+        if (is_string($serialized)) {
+            return unserialize($serialized);
         }
+
         return null;
     }
 
@@ -127,13 +131,12 @@ class DoctrineStorage extends PdoStorage
             'limit'  => $max,
         ]);
 
-        $stmt = $this->entityManager->getConnection()->prepare($sql);
-        $res  = $stmt->executeQuery($params);
+        $res = $this->entityManager->getConnection()->executeQuery($sql, $params);
 
         $results = [];
         foreach ($res->fetchAllAssociative() as $row) {
-            $data      = unserialize($row[ 'data' ]);
-            $results[] = $data[ '__meta' ];
+            $data      = unserialize($row['data']);
+            $results[] = $data['__meta'];
             unset($data);
         }
         return $results;

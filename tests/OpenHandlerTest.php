@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class OpenHandlerTest extends TestCase
 {
+    private DebugBar $debugbar;
     private OpenHandler $openHandler;
 
     public function setUp(): void
