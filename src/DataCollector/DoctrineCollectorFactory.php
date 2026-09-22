@@ -19,23 +19,23 @@ class DoctrineCollectorFactory
      * @throws DebugBarException
      * @throws NotFoundExceptionInterface
      */
-    public function __invoke( ContainerInterface $container): DoctrineCollector
+    public function __invoke(ContainerInterface $container): DoctrineCollector
     {
-        $entityManager = $container->get('doctrine.entity_manager.orm_default');
-        $middlewares = $entityManager->getConnection()->getConfiguration()->getMiddlewares();
-        $debugBarSQLMiddleware = null;
+        $entityManager         = $container->get('doctrine.entity_manager.orm_default');
+        $middlewares           = $entityManager->getConnection()->getConfiguration()->getMiddlewares();
+        $debugBarSqlMiddleware = null;
         foreach ($middlewares as $middleware) {
             if ($middleware instanceof DebugBarSQLMiddleware) {
-                $debugBarSQLMiddleware = $middleware;
+                $debugBarSqlMiddleware = $middleware;
                 break;
             }
         }
-        if ($debugBarSQLMiddleware === null) {
+        if ($debugBarSqlMiddleware === null) {
             throw new RuntimeException(
                 'DebugBarSQLMiddleware was not found in the Doctrine configuration. '
                 . 'Please register it under "middlewares" in the Doctrine config.'
             );
         }
-        return new DoctrineCollector($debugBarSQLMiddleware);
+        return new DoctrineCollector($debugBarSqlMiddleware);
     }
 }

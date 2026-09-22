@@ -41,7 +41,6 @@ class ConfigProviderTest extends TestCase
     public function testInvocationReturnsArrayWithDependencies(): void
     {
         $config = ($this->provider)();
-        self::assertIsArray($config);
         self::assertArrayHasKey('dependencies', $config);
         self::assertArrayHasKey('factories', $config['dependencies']);
 

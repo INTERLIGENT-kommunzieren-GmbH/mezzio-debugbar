@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use function count;
 use function implode;
 use function is_string;
+use function microtime;
 use function serialize;
 use function unserialize;
 
@@ -41,25 +42,26 @@ class DoctrineStorage extends PdoStorage
      *
      * @throws Exception
      */
-    public function save($id, $data): void
+    public function save(string $id, array $data): void
     {
-        $sql  = $this->getSqlQuery('save');
-        $stmt = $this->entityManager->getConnection()->prepare($sql);
-        $meta = $data[ '__meta' ];
-        $stmt->executeStatement(
+        $meta = $data['__meta'];
+        $this->entityManager->getConnection()->executeStatement(
+            $this->getSqlQuery('save'),
             [
                 $id,
                 serialize($data),
-                $meta[ 'utime' ],
-                $meta[ 'datetime' ],
-                $meta[ 'uri' ],
-                $meta[ 'ip' ],
-                $meta[ 'method' ],
+                $meta['utime'],
+                $meta['datetime'],
+                $meta['uri'],
+                $meta['ip'],
+                $meta['method'],
             ]
         );
         if ($this->saveSqlQueriesToExtraTable) {
-            $this->saveSqlQueries($id, $data[ 'doctrine' ][ 'statements' ] ?? null);
+            $this->saveSqlQueries($id, $data['doctrine']['statements'] ?? null);
         }
+
+        $this->autoPrune();
     }
 
     /**
@@ -71,15 +73,14 @@ class DoctrineStorage extends PdoStorage
             return;
         }
         foreach ($statements as $statement) {
-            $sql  = $this->getSqlQuery('extra_table');
-            $stmt = $this->entityManager->getConnection()->prepare($sql);
-            $stmt->executeStatement(
+            $this->entityManager->getConnection()->executeStatement(
+                $this->getSqlQuery('extra_table'),
                 [
                     $requestId,
                     $statement['sql'],
                     serialize($statement['params']),
-                    $statement[ 'duration' ],
-                    $statement[ 'duration_str' ],
+                    $statement['duration'],
+                    $statement['duration_str'],
                 ]
             );
         }
@@ -88,17 +89,20 @@ class DoctrineStorage extends PdoStorage
     /**
      * {@inheritdoc}
      *
+     * @return array<string, mixed>
      * @throws Exception
      */
-    public function get($id): array
+    public function get(string $id): array
     {
-        $sql  = $this->getSqlQuery('get');
-        $stmt = $this->entityManager->getConnection()->prepare($sql);
-        $res  = $stmt->executeQuery([$id]);
-        $data = $res->fetchFirstColumn();
-        if (is_string($data[0] ?? null)) {
-            return unserialize($data[0]);
+        $data = $this->entityManager->getConnection()
+            ->executeQuery($this->getSqlQuery('get'), [$id])
+            ->fetchFirstColumn();
+
+        $serialized = $data[0] ?? null;
+        if (is_string($serialized)) {
+            return unserialize($serialized);
         }
+
         return [];
     }
 
@@ -107,7 +111,7 @@ class DoctrineStorage extends PdoStorage
      *
      * @throws Exception
      */
-    public function find(array $filters = [], $max = 20, $offset = 0): array
+    public function find(array $filters = [], int $max = 20, int $offset = 0): array
     {
         $where  = [];
         $params = [];
@@ -127,13 +131,12 @@ class DoctrineStorage extends PdoStorage
             'limit'  => $max,
         ]);
 
-        $stmt = $this->entityManager->getConnection()->prepare($sql);
-        $res  = $stmt->executeQuery($params);
+        $res = $this->entityManager->getConnection()->executeQuery($sql, $params);
 
         $results = [];
         foreach ($res->fetchAllAssociative() as $row) {
-            $data      = unserialize($row[ 'data' ]);
-            $results[] = $data[ '__meta' ];
+            $data      = unserialize($row['data']);
+            $results[] = $data['__meta'];
             unset($data);
         }
         return $results;
@@ -147,5 +150,36 @@ class DoctrineStorage extends PdoStorage
     public function clear(): void
     {
         $this->entityManager->getConnection()->executeStatement($this->getSqlQuery('clear'));
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * PdoStorage implements this against its own PDO handle, which this subclass never
+     * initialises; it has to go through the Doctrine connection instead.
+     *
+     * @throws Exception
+     */
+    public function count(): int
+    {
+        return (int) $this->entityManager->getConnection()
+            ->executeQuery('SELECT COUNT(*) FROM ' . $this->tableName)
+            ->fetchOne();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * PdoStorage implements this against its own PDO handle, which this subclass never
+     * initialises; it has to go through the Doctrine connection instead.
+     *
+     * @throws Exception
+     */
+    public function prune(int $hours = 24): void
+    {
+        $this->entityManager->getConnection()->executeStatement(
+            'DELETE FROM ' . $this->tableName . ' WHERE meta_utime <= ?',
+            [microtime(true) - $hours * 3600]
+        );
     }
 }

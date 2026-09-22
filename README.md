@@ -1,23 +1,23 @@
-
--forked from : https://github.com/middlewares/debugbar
-
--forked from : https://github.com/php-middleware/phpdebugbar
-
-# mezzio/debugbar
+# ik-oss/mezzio-debugbar
 
 [![Software License][ico-license]](LICENSE)
-![Testing][ico-ga]
-[![Total Downloads][ico-downloads]][link-downloads]
+[![CI][ico-ga]][link-ga]
 
-Middleware to insert [PHP DebugBar](http://phpdebugbar.com) automatically in html responses for Mezzio Framwork.
+Middleware to insert [PHP DebugBar](https://php-debugbar.com) automatically in html responses for the Mezzio framework.
+
+Maintained by [INTERLIGENT kommunizieren GmbH][link-org]. This is a fork of
+[mostafasy/mezzio-debugbar](https://github.com/mostafasy/mezzio-debugbar), which is no longer
+maintained; that package is in turn a fork of
+[php-middleware/phpdebugbar](https://github.com/php-middleware/phpdebugbar) and
+[middlewares/debugbar](https://github.com/middlewares/debugbar).
 
 ## Requirements
 
-* PHP >= 7.4
+* PHP 8.5
 
 ## Installation
 ```
-composer require --dev mostafasy/mezzio-debugbar 
+composer require --dev ik-oss/mezzio-debugbar
 ```
 ## Example
 
@@ -93,7 +93,7 @@ please note you have to execute sql schema [pdo-sql-Schema]
 
 ## Doctrine Storage
 
-It will collect data and saved to database by using Doctine you can configure as :   
+It will collect data and saved to database by using Doctrine you can configure as :   
 ```
 'storage'    => DoctrineStorage::class,
   'doctrine_storage'=>[
@@ -103,6 +103,31 @@ It will collect data and saved to database by using Doctine you can configure as
 
 ```
 you have to execute sql schema: [doctrine-sql-Schema]
+
+`DoctrineStorage` works with both `doctrine/dbal` 3 and 4.
+
+---
+
+## Doctrine Collector
+
+This branch builds on `php-debugbar` 3 and collects Doctrine queries through
+[`php-debugbar/doctrine-bridge`][link-doctrine-bridge], which works with `doctrine/dbal` 3 and 4.
+
+The bridge's `DebugBarSQLMiddleware` has to be registered on the DBAL configuration *before* the
+connection is created, so it cannot be attached to an existing `EntityManager`. Register it under
+`middlewares` in your Doctrine config; `DoctrineCollectorFactory` then picks it up and throws a
+`RuntimeException` if it is missing.
+
+```php
+'middlewares' => [
+    DebugBar\Bridge\Doctrine\DebugBarSQLMiddleware::class,
+],
+```
+
+> **Note**
+> `php-debugbar` 3 removed its bundled bridges, so the Monolog and Symfony mailer collector
+> factories are not available on this branch; only the Doctrine bridge was split into a
+> separate package.
 
 ---
 
@@ -149,12 +174,11 @@ Please see [CHANGELOG](CHANGELOG.md) for more information about recent changes a
 
 The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/middlewares/debugbar.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-ga]: https://github.com/middlewares/debugbar/workflows/testing/badge.svg
-[ico-downloads]: https://img.shields.io/packagist/dt/middlewares/debugbar.svg?style=flat-square
+[ico-ga]: https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar/actions/workflows/ci.yml/badge.svg
 
-[link-packagist]: https://packagist.org/packages/mostafasy/mezzio-debugbar
-[link-downloads]: https://packagist.org/packages/mostafasy/mezzio-debugbar
-[pdo-sql-Schema]:https://github.com/mostafasy/mezzio-debugbar/blob/master/src/Storage/DatabaseSchemaSql/pdo_storge_sql_schema.sql
-[doctrine-sql-Schema]:https://github.com/mostafasy/mezzio-debugbar/blob/master/src/Storage/DatabaseSchemaSql/doctrine_storge_sql_schema.sql
+[link-ga]: https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar/actions/workflows/ci.yml
+[link-org]: https://github.com/INTERLIGENT-kommunzieren-GmbH
+[link-doctrine-bridge]: https://github.com/php-debugbar/doctrine-bridge
+[pdo-sql-Schema]: https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar/blob/master/src/Storage/DatabaseSchemaSql/pdo_storge_sql_schema.sql
+[doctrine-sql-Schema]: https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar/blob/master/src/Storage/DatabaseSchemaSql/doctrine_storge_sql_schema.sql

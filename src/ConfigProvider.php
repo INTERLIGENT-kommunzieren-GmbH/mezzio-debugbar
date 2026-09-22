@@ -62,15 +62,15 @@ final class ConfigProvider
     {
         return [
             'factories' => [
-                DebugBarMiddleware::class => DebugBarMiddlewareFactory::class,
-                ConfigCollector::class    => ConfigCollectorFactory::class,
-                DoctrineCollector::class  => DoctrineCollectorFactory::class,
-                DebugBar::class           => StandardDebugBarFactory::class,
-                FileStorage::class        => FileStorageFactory::class,
-                OpenHandler::class        => OpenHandlerFactory::class,
-                DoctrineStorage::class    => DoctrineStorageFactory::class,
-                PdoStorage::class         => PdoStorageFactory::class,
-                RouteCollector::class     => RouteCollectorFactory::class,
+                DebugBarMiddleware::class    => DebugBarMiddlewareFactory::class,
+                ConfigCollector::class       => ConfigCollectorFactory::class,
+                DoctrineCollector::class     => DoctrineCollectorFactory::class,
+                DebugBar::class              => StandardDebugBarFactory::class,
+                FileStorage::class           => FileStorageFactory::class,
+                OpenHandler::class           => OpenHandlerFactory::class,
+                DoctrineStorage::class       => DoctrineStorageFactory::class,
+                PdoStorage::class            => PdoStorageFactory::class,
+                RouteCollector::class        => RouteCollectorFactory::class,
                 DebugBarSQLMiddleware::class => DebugBarSQLMiddlewareFactory::class,
             ],
         ];

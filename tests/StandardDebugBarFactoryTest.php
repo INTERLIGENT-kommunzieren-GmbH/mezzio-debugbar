@@ -8,15 +8,20 @@ use DebugBar\DataCollector\ConfigCollector;
 use DebugBar\DebugBar;
 use DebugBar\StandardDebugBar;
 use Mezzio\DebugBar\StandardDebugBarFactory;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use stdClass;
 
 class StandardDebugBarFactoryTest extends TestCase
 {
+    /** @var ContainerInterface&Stub */
+    protected ContainerInterface $container;
+    protected ConfigCollector $collector;
+
     protected function setUp(): void
     {
-        $this->container = $this->createMock(ContainerInterface::class);
+        $this->container = $this->createStub(ContainerInterface::class);
         $this->collector = new ConfigCollector(['s' => 'bar', 'a' => [], 'o' => new stdClass()]);
     }
 
@@ -24,14 +29,14 @@ class StandardDebugBarFactoryTest extends TestCase
     {
         $this->container
             ->method('has')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [DebugBar::class, true],
                 [ConfigCollector::class, true],
-            ]));
+            ]);
 
         $this->container
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [DebugBar::class, new DebugBar()],
                 [ConfigCollector::class, $this->collector],
                 [
@@ -40,7 +45,7 @@ class StandardDebugBarFactoryTest extends TestCase
                         'debugbar' => ['collectors' => [ConfigCollector::class], 'storage' => null],
                     ],
                 ],
-            ]));
+            ]);
 
         $factory  = new StandardDebugBarFactory();
         $debugbar = $factory($this->container);

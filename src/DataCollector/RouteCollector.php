@@ -9,6 +9,7 @@ use DebugBar\DataCollector\Renderable;
 use DebugBar\DataCollector\Resettable;
 use Laminas\Diactoros\ServerRequestFactory;
 use Mezzio\Router\RouterInterface;
+
 use function is_string;
 
 class RouteCollector extends DataCollector implements Renderable, Resettable
@@ -31,15 +32,13 @@ class RouteCollector extends DataCollector implements Renderable, Resettable
     {
         $this->data = [];
     }
-    /**
-     * @return array
-     */
+
     public function collect(): array
     {
         $this->data = $this->getRouteInformation();
-        foreach ( $this->data as $k => $v ) {
+        foreach ($this->data as $k => $v) {
             if ($this->isHtmlVarDumperUsed()) {
-                $v = $this->getDataFormatter()->formatVar( $v );
+                $v = $this->getDataFormatter()->formatVar($v);
             } elseif (! is_string($v)) {
                 $v = $this->getDataFormatter()->formatVar($v);
             }
@@ -66,21 +65,14 @@ class RouteCollector extends DataCollector implements Renderable, Resettable
         return $this->config[ 'routes' ][ $match->getMatchedRouteName() ] ?? ['no data'];
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-
-    /**
-     * @return array
-     */
     public function getWidgets(): array
     {
-        $name = $this->getName();
+        $name   = $this->getName();
         $widget = match (true) {
             $this->isJsonVarDumperUsed() => "PhpDebugBar.Widgets.JsonVariableListWidget",
             $this->isHtmlVarDumperUsed() => "PhpDebugBar.Widgets.HtmlVariableListWidget",
@@ -88,12 +80,11 @@ class RouteCollector extends DataCollector implements Renderable, Resettable
         };
         return [
             "$name" => [
-                "icon"   => "adjustments",
-                "widget" => $widget,
-                "map"    => "$name",
+                "icon"    => "adjustments",
+                "widget"  => $widget,
+                "map"     => "$name",
                 "default" => "{}",
             ],
         ];
     }
-
 }

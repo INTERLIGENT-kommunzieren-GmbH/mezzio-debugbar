@@ -5,6 +5,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased - 2.0.x]
+
+This branch carries upstream's php-debugbar 3 / Doctrine ORM 3 work, with the `master`
+modernization merged on top. It is not the default branch yet.
+
+### Changed
+- `php-debugbar/php-debugbar` raised to ^3.5 (3.5 is the first release providing
+  `DataCollector\Resettable` and `isJsonVarDumperUsed()`, both of which this branch uses).
+- The Doctrine collector now reads queries from `php-debugbar/doctrine-bridge`'s
+  `DebugBarSQLMiddleware` instead of the removed `Doctrine\DBAL\Logging\DebugStack`, so it
+  works with `doctrine/dbal` 4. The middleware must be registered in the application's
+  Doctrine config; see the README.
+- Test doubles and `DoctrineStorage` updated to php-debugbar 3's fully typed
+  `StorageInterface`/`DataCollectorInterface`.
+- `OpenHandler` casts the `max`, `offset` and `id` query parameters, which
+  `StorageInterface` now declares as `int`/`string`.
+
+### Removed
+- `MonologCollectorFactory` and `SymfonyMailCollectorFactory`. php-debugbar 3 removed its
+  bundled bridges and only the Doctrine bridge was released as a separate package, so the
+  collectors these factories build no longer exist. They were never autoloadable in any
+  released version (both files were committed without a `.php` extension).
+
+### Fixed
+- `DoctrineStorage` inherited `count()` and `prune()` from `PdoStorage`, which use the `$pdo`
+  property this subclass never initialises; both are now implemented on the Doctrine
+  connection. `save()` also triggers `autoPrune()`, matching the parent.
+
+## [Unreleased]
+### Changed
+- Package renamed from `mostafasy/mezzio-debugbar` to `ik-oss/mezzio-debugbar`; maintenance moved
+  to INTERLIGENT kommunizieren GmbH after the upstream project was abandoned.
+- Minimum PHP version raised to 8.5.
+- Test suite upgraded to PHPUnit 12 (`returnValueMap()` replaced by `willReturnMap()`, mocks
+  without expectations replaced by stubs, dynamic properties declared).
+- Dev dependencies upgraded: laminas-coding-standard 3, PHPStan 2, laminas-diactoros 3.
+- CI workflow rewritten for PHP 8.5; now also runs PHPStan and a `--prefer-lowest` job.
+
+### Added
+- `phpstan.neon.dist`, so the existing `composer phpstan` script actually has a configuration.
+
+### Fixed
+- `MonologCollectorFactory` and `SymfonyMailCollectorFactory` were committed without a `.php`
+  extension and could never be autoloaded.
+- `DoctrineStorage` passed parameters to `Statement::executeStatement()`/`executeQuery()`, which
+  is not supported from doctrine/dbal 3 onwards; it now binds them via the connection.
+- `RouteCollector` redeclared `$useHtmlVarDumper`, `useHtmlVarDumper()` and
+  `isHtmlVarDumperUsed()`, which are already provided by `DebugBar\DataFormatter\HasDataFormatter`.
+
 ## [2.1.0] - 2021-07-10
 ### Added
 - New option `renderOptions` [#12].
