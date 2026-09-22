@@ -15,6 +15,13 @@ maintained; that package is in turn a fork of
 
 * PHP 8.5
 
+## Versions
+
+| Line | Branch | php-debugbar | Doctrine collector |
+| --- | --- | --- | --- |
+| 2.x | `master` | ^3.5 | via `php-debugbar/doctrine-bridge`, works with dbal 3 and 4 |
+| 1.x | `1.0.x` | ^2.2 | uses `DBAL\Logging\DebugStack`, requires dbal ^3 |
+
 ## Installation
 ```
 composer require --dev ik-oss/mezzio-debugbar
@@ -24,7 +31,7 @@ composer require --dev ik-oss/mezzio-debugbar
 This package supplies a config provider, which could be added to your config/config.php when using laminas-config-aggregator or mezzio-config-manager. However, because it should only be enabled in development, we recommend creating a "local" configuration file (e.g., config/autoload/php-debugbar.local.php) when you need to enable it, with the following contents:
 
 ```php
-use DebugBar\Bridge\DoctrineCollector;
+use DebugBar\Bridge\Doctrine\DoctrineCollector;
 use DebugBar\Storage\FileStorage;
 use Laminas\ConfigAggregator\ConfigAggregator;
 use Laminas\Stdlib\ArrayUtils;
@@ -110,7 +117,7 @@ you have to execute sql schema: [doctrine-sql-Schema]
 
 ## Doctrine Collector
 
-This branch builds on `php-debugbar` 3 and collects Doctrine queries through
+This package builds on `php-debugbar` 3 and collects Doctrine queries through
 [`php-debugbar/doctrine-bridge`][link-doctrine-bridge], which works with `doctrine/dbal` 3 and 4.
 
 The bridge's `DebugBarSQLMiddleware` has to be registered on the DBAL configuration *before* the
@@ -126,8 +133,8 @@ connection is created, so it cannot be attached to an existing `EntityManager`. 
 
 > **Note**
 > `php-debugbar` 3 removed its bundled bridges, so the Monolog and Symfony mailer collector
-> factories are not available on this branch; only the Doctrine bridge was split into a
-> separate package.
+> factories are not available in 2.x; only the Doctrine bridge was republished as a separate
+> package. They still exist in the 1.x line.
 
 ---
 
