@@ -15,6 +15,11 @@ maintained; that package is in turn a fork of
 
 * PHP 8.5
 
+## Versions
+
+This is the **1.x** maintenance line (`php-debugbar` ^2.2), maintained on the `1.0.x` branch.
+New work goes to the 2.x line on `master`, which tracks `php-debugbar` 3.
+
 ## Installation
 ```
 composer require --dev ik-oss/mezzio-debugbar
@@ -111,10 +116,9 @@ you have to execute sql schema: [doctrine-sql-Schema]
 ## Doctrine Collector
 
 > **Note**
-> The Doctrine collector on this branch relies on `Doctrine\DBAL\Logging\DebugStack`, which was
-> removed in `doctrine/dbal` 4. It therefore requires `doctrine/dbal` ^3. Upstream's `2.0.x` branch
-> (preserved in this repository) reimplements the collector on top of
-> `php-debugbar/doctrine-bridge` for DBAL 4; it has not been merged into `master` yet.
+> The Doctrine collector in the 1.x line relies on `Doctrine\DBAL\Logging\DebugStack`, which was
+> removed in `doctrine/dbal` 4. It therefore requires `doctrine/dbal` ^3. The 2.x line reimplements
+> the collector on top of `php-debugbar/doctrine-bridge`, which works with dbal 3 and 4.
 
 ---
 
