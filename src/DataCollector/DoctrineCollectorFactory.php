@@ -4,17 +4,38 @@ declare(strict_types=1);
 
 namespace Ikoss\Mezzio\DebugBar\DataCollector;
 
-use DebugBar\Bridge\DoctrineCollector;
-use Doctrine\DBAL\Logging\DebugStack;
+use DebugBar\Bridge\Doctrine\DebugBarSQLMiddleware;
+use DebugBar\Bridge\Doctrine\DoctrineCollector;
+use DebugBar\DebugBarException;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use RuntimeException;
 
 class DoctrineCollectorFactory
 {
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws DebugBarException
+     * @throws NotFoundExceptionInterface
+     */
     public function __invoke(ContainerInterface $container): DoctrineCollector
     {
-        $entityManager = $container->get('doctrine.entity_manager.orm_default');
-        $entityManager->getConnection()->getConfiguration()->setSQLLogger(new DebugStack());
-
-        return new DoctrineCollector($entityManager);
+        $entityManager         = $container->get('doctrine.entity_manager.orm_default');
+        $middlewares           = $entityManager->getConnection()->getConfiguration()->getMiddlewares();
+        $debugBarSqlMiddleware = null;
+        foreach ($middlewares as $middleware) {
+            if ($middleware instanceof DebugBarSQLMiddleware) {
+                $debugBarSqlMiddleware = $middleware;
+                break;
+            }
+        }
+        if ($debugBarSqlMiddleware === null) {
+            throw new RuntimeException(
+                'DebugBarSQLMiddleware was not found in the Doctrine configuration. '
+                . 'Please register it under "middlewares" in the Doctrine config.'
+            );
+        }
+        return new DoctrineCollector($debugBarSqlMiddleware);
     }
 }

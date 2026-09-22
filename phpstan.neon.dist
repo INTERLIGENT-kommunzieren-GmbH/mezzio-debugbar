@@ -4,11 +4,3 @@ parameters:
         - src
         - tests
     treatPhpDocTypesAsCertain: false
-    ignoreErrors:
-        # DebugBar\Storage\StorageInterface::save() documents $data as string, but
-        # DebugBar\DebugBar::getData() always hands the storage an array. The override
-        # below documents what is actually passed; the "incompatible" report is an
-        # artefact of the inaccurate upstream docblock.
-        -
-            identifier: method.childParameterType
-            path: src/Storage/DoctrineStorage.php

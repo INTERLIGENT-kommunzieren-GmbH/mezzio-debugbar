@@ -25,7 +25,7 @@ class MockCollector extends DataCollector implements Renderable
     /**
      * @inheritDoc
      */
-    public function collect()
+    public function collect(): array
     {
         return $this->data;
     }
@@ -33,7 +33,7 @@ class MockCollector extends DataCollector implements Renderable
     /**
      * @inheritDoc
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -41,7 +41,7 @@ class MockCollector extends DataCollector implements Renderable
     /**
      * @inheritDoc
      */
-    public function getWidgets()
+    public function getWidgets(): array
     {
         return $this->widgets;
     }

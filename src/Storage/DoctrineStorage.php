@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use function count;
 use function implode;
 use function is_string;
+use function microtime;
 use function serialize;
 use function unserialize;
 
@@ -39,11 +40,9 @@ class DoctrineStorage extends PdoStorage
     /**
      * {@inheritdoc}
      *
-     * @param string $id
-     * @param array<string, mixed> $data
      * @throws Exception
      */
-    public function save($id, $data)
+    public function save(string $id, array $data): void
     {
         $meta = $data['__meta'];
         $this->entityManager->getConnection()->executeStatement(
@@ -59,8 +58,10 @@ class DoctrineStorage extends PdoStorage
             ]
         );
         if ($this->saveSqlQueriesToExtraTable) {
-            $this->saveSqlQueries($id, $data[ 'doctrine' ][ 'statements' ] ?? null);
+            $this->saveSqlQueries($id, $data['doctrine']['statements'] ?? null);
         }
+
+        $this->autoPrune();
     }
 
     /**
@@ -88,11 +89,10 @@ class DoctrineStorage extends PdoStorage
     /**
      * {@inheritdoc}
      *
-     * @param string $id
-     * @return array<string, mixed>|null
+     * @return array<string, mixed>
      * @throws Exception
      */
-    public function get($id)
+    public function get(string $id): array
     {
         $data = $this->entityManager->getConnection()
             ->executeQuery($this->getSqlQuery('get'), [$id])
@@ -103,7 +103,7 @@ class DoctrineStorage extends PdoStorage
             return unserialize($serialized);
         }
 
-        return null;
+        return [];
     }
 
     /**
@@ -111,7 +111,7 @@ class DoctrineStorage extends PdoStorage
      *
      * @throws Exception
      */
-    public function find(array $filters = [], $max = 20, $offset = 0)
+    public function find(array $filters = [], int $max = 20, int $offset = 0): array
     {
         $where  = [];
         $params = [];
@@ -147,8 +147,39 @@ class DoctrineStorage extends PdoStorage
      *
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         $this->entityManager->getConnection()->executeStatement($this->getSqlQuery('clear'));
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * PdoStorage implements this against its own PDO handle, which this subclass never
+     * initialises; it has to go through the Doctrine connection instead.
+     *
+     * @throws Exception
+     */
+    public function count(): int
+    {
+        return (int) $this->entityManager->getConnection()
+            ->executeQuery('SELECT COUNT(*) FROM ' . $this->tableName)
+            ->fetchOne();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * PdoStorage implements this against its own PDO handle, which this subclass never
+     * initialises; it has to go through the Doctrine connection instead.
+     *
+     * @throws Exception
+     */
+    public function prune(int $hours = 24): void
+    {
+        $this->entityManager->getConnection()->executeStatement(
+            'DELETE FROM ' . $this->tableName . ' WHERE meta_utime <= ?',
+            [microtime(true) - $hours * 3600]
+        );
     }
 }

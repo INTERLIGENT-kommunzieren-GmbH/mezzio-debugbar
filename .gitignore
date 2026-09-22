@@ -4,3 +4,4 @@ coverage
 *.cache
 .phpcs-cache
 .phpunit.cache
+.idea

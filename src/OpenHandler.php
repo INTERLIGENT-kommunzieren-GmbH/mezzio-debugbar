@@ -50,9 +50,9 @@ class OpenHandler implements RequestHandlerInterface
 
     protected function find(array $queryParams): array
     {
-        $max = $queryParams['max'] ?? 20;
-
-        $offset = $queryParams['offset'] ?? 0;
+        // Query parameters arrive as strings; StorageInterface::find() expects integers.
+        $max    = (int) ($queryParams['max'] ?? 20);
+        $offset = (int) ($queryParams['offset'] ?? 0);
 
         $filters = [];
         foreach (self::FILTER_KEYS as $key) {
@@ -73,7 +73,7 @@ class OpenHandler implements RequestHandlerInterface
         if ($id === null) {
             throw new DebugBarException("Missing 'id' parameter in 'get' operation");
         }
-        return $this->debugBar->getStorage()->get($id);
+        return $this->debugBar->getStorage()->get((string) $id);
     }
 
     protected function clear(): array

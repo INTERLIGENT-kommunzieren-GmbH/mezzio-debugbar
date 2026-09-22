@@ -110,11 +110,24 @@ you have to execute sql schema: [doctrine-sql-Schema]
 
 ## Doctrine Collector
 
+This branch builds on `php-debugbar` 3 and collects Doctrine queries through
+[`php-debugbar/doctrine-bridge`][link-doctrine-bridge], which works with `doctrine/dbal` 3 and 4.
+
+The bridge's `DebugBarSQLMiddleware` has to be registered on the DBAL configuration *before* the
+connection is created, so it cannot be attached to an existing `EntityManager`. Register it under
+`middlewares` in your Doctrine config; `DoctrineCollectorFactory` then picks it up and throws a
+`RuntimeException` if it is missing.
+
+```php
+'middlewares' => [
+    DebugBar\Bridge\Doctrine\DebugBarSQLMiddleware::class,
+],
+```
+
 > **Note**
-> The Doctrine collector on this branch relies on `Doctrine\DBAL\Logging\DebugStack`, which was
-> removed in `doctrine/dbal` 4. It therefore requires `doctrine/dbal` ^3. Upstream's `2.0.x` branch
-> (preserved in this repository) reimplements the collector on top of
-> `php-debugbar/doctrine-bridge` for DBAL 4; it has not been merged into `master` yet.
+> `php-debugbar` 3 removed its bundled bridges, so the Monolog and Symfony mailer collector
+> factories are not available on this branch; only the Doctrine bridge was split into a
+> separate package.
 
 ---
 
@@ -166,5 +179,6 @@ The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
 
 [link-ga]: https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar/actions/workflows/ci.yml
 [link-org]: https://github.com/INTERLIGENT-kommunzieren-GmbH
+[link-doctrine-bridge]: https://github.com/php-debugbar/doctrine-bridge
 [pdo-sql-Schema]: https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar/blob/master/src/Storage/DatabaseSchemaSql/pdo_storge_sql_schema.sql
 [doctrine-sql-Schema]: https://github.com/INTERLIGENT-kommunzieren-GmbH/mezzio-debugbar/blob/master/src/Storage/DatabaseSchemaSql/doctrine_storge_sql_schema.sql
