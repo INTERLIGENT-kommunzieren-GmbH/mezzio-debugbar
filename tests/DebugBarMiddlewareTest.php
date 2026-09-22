@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\DebugBar\Tests;
+namespace Ikoss\Mezzio\DebugBar\Tests;
 
 use DebugBar\DataCollector\ConfigCollector;
 use DebugBar\DebugBar;
+use Ikoss\Mezzio\DebugBar\DebugBarMiddleware;
 use Laminas\Diactoros\Response;
 use Laminas\Diactoros\ResponseFactory;
 use Laminas\Diactoros\ServerRequest;
 use Laminas\Diactoros\StreamFactory;
-use Mezzio\DebugBar\DebugBarMiddleware;
 use PHPUnit\Framework\TestCase;
 
 class DebugBarMiddlewareTest extends TestCase

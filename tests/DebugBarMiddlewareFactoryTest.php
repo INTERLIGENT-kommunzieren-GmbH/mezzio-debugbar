@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\DebugBar\Tests;
+namespace Ikoss\Mezzio\DebugBar\Tests;
 
 use DebugBar\DataCollector\ConfigCollector;
 use DebugBar\DebugBar;
-use Mezzio\DebugBar\DebugBarMiddleware;
-use Mezzio\DebugBar\DebugBarMiddlewareFactory;
+use Ikoss\Mezzio\DebugBar\DebugBarMiddleware;
+use Ikoss\Mezzio\DebugBar\DebugBarMiddlewareFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;

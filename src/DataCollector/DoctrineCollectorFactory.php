@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\DebugBar\DataCollector;
+namespace Ikoss\Mezzio\DebugBar\DataCollector;
 
 use DebugBar\Bridge\DoctrineCollector;
 use Doctrine\DBAL\Logging\DebugStack;

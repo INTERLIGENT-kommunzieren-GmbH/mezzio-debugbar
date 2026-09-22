@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\DebugBar\Tests\DataCollector;
+namespace Ikoss\Mezzio\DebugBar\Tests\DataCollector;
 
 use DebugBar\DataCollector\DataCollector;
 use DebugBar\DataCollector\Renderable;

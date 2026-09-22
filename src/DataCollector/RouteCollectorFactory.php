@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\DebugBar\DataCollector;
+namespace Ikoss\Mezzio\DebugBar\DataCollector;
 
 use Mezzio\Router\RouterInterface;
 use Psr\Container\ContainerInterface;

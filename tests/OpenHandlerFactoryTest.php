@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\DebugBar\Tests;
+namespace Ikoss\Mezzio\DebugBar\Tests;
 
 use DebugBar\DebugBar;
 use DebugBar\DebugBarException;
 use DebugBar\StandardDebugBar;
-use Mezzio\DebugBar\OpenHandler;
-use Mezzio\DebugBar\OpenHandlerFactory;
-use Mezzio\DebugBar\Tests\Storage\MockStorage;
+use Ikoss\Mezzio\DebugBar\OpenHandler;
+use Ikoss\Mezzio\DebugBar\OpenHandlerFactory;
+use Ikoss\Mezzio\DebugBar\Tests\Storage\MockStorage;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 

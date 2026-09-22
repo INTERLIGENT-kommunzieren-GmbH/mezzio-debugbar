@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\DebugBar\Tests\Storage;
+namespace Ikoss\Mezzio\DebugBar\Tests\Storage;
 
 use DebugBar\Storage\StorageInterface;
 

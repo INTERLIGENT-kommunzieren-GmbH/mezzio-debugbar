@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Package renamed from `mostafasy/mezzio-debugbar` to `ik-oss/mezzio-debugbar`; maintenance moved
   to INTERLIGENT kommunizieren GmbH after the upstream project was abandoned.
+- **BC break:** the PHP namespace moved from `Mezzio\DebugBar\` to `Ikoss\Mezzio\DebugBar\`.
+  Every reference has to be updated, including `Mezzio\DebugBar\ConfigProvider::class` in
+  `config/config.php` and any service names pinned to the old namespace in local config.
 - Minimum PHP version raised to 8.5.
 - Test suite upgraded to PHPUnit 12 (`returnValueMap()` replaced by `willReturnMap()`, mocks
   without expectations replaced by stubs, dynamic properties declared).

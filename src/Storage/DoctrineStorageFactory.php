@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\DebugBar\Storage;
+namespace Ikoss\Mezzio\DebugBar\Storage;
 
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;

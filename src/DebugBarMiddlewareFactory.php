@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mezzio\DebugBar;
+namespace Ikoss\Mezzio\DebugBar;
 
 use DebugBar\DebugBar;
 use Psr\Container\ContainerInterface;
