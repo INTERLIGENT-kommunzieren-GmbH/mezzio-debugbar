@@ -5,7 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## 1.0.0 - 2026-09-22
+
+First release under the `ik-oss` name. Tracks `php-debugbar` 2.
+
 ### Changed
 - Package renamed from `mostafasy/mezzio-debugbar` to `ik-oss/mezzio-debugbar`; maintenance moved
   to INTERLIGENT kommunizieren GmbH after the upstream project was abandoned.
@@ -29,15 +32,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - `RouteCollector` redeclared `$useHtmlVarDumper`, `useHtmlVarDumper()` and
   `isHtmlVarDumperUsed()`, which are already provided by `DebugBar\DataFormatter\HasDataFormatter`.
 
-## [2.1.0] - 2021-07-10
+## Pre-fork history
+
+Releases made before this package was forked into `ik-oss`, by
+[mostafasy/mezzio-debugbar](https://github.com/mostafasy/mezzio-debugbar),
+[php-middleware/phpdebugbar](https://github.com/php-middleware/phpdebugbar) and
+[middlewares/debugbar](https://github.com/middlewares/debugbar). The version numbers below
+belong to those packages and are unrelated to `ik-oss/mezzio-debugbar` releases.
+
+### [2.1.0] - 2021-07-10
 ### Added
 - New option `renderOptions` [#12].
 
-## [2.0.1] - 2020-12-02
+### [2.0.1] - 2020-12-02
 ### Added
 - Support for PHP 8
 
-## [2.0.0] - 2019-12-01
+### [2.0.0] - 2019-12-01
 ### Added
 - Added a second argument to the constructor to set a `responseFactory`
 - Added a third argument to the constructor to set a `streamFactory`
@@ -46,13 +57,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Support for PHP 7.0 and 7.1
 - Options `responseFactory` and `streamFactory`. Use the constructor arguments.
 
-## [1.1.0] - 2018-08-04
+### [1.1.0] - 2018-08-04
 ### Added
 - PSR-17 support
 - New option `responseFactory`
 - New option `streamFactory`
 
-## [1.0.0] - 2018-01-25
+### [1.0.0] - 2018-01-25
 ### Added
 - Improved testing and added code coverage reporting
 - Added tests for PHP 7.2
@@ -63,14 +74,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Updated license year
 
-## [0.5.0] - 2017-11-13
+### [0.5.0] - 2017-11-13
 ### Changed
 - Replaced `http-interop/http-middleware` with  `http-interop/http-server-middleware`.
 
 ### Removed
 - Removed support for PHP 5.x.
 
-## [0.4.0] - 2017-09-21
+### [0.4.0] - 2017-09-21
 ### Added
 - New option `inline()` to embed the code inline in the html
 
@@ -80,25 +91,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Upgraded phpunit to the latest version and improved its config file
 - Updated to `http-interop/http-middleware#0.5`
 
-## [0.3.2] - 2017-03-28
+### [0.3.2] - 2017-03-28
 ### Fixed
 - Fix `Content-Length` header
 
-## [0.3.1] - 2017-03-08
+### [0.3.1] - 2017-03-08
 ### Fixed
 - Null reference bug
 
-## [0.3.0] - 2016-12-26
+### [0.3.0] - 2016-12-26
 ### Changed
 - Updated tests
 - Updated to `http-interop/http-middleware#0.4`
 - Updated `friendsofphp/php-cs-fixer#2.0`
 
-## [0.2.0] - 2016-11-27
+### [0.2.0] - 2016-11-27
 ### Changed
 - Updated to `http-interop/http-middleware#0.3`
 
-## 0.1.0 - 2016-10-08
+### 0.1.0 - 2016-10-08
 First version
 
 [#12]: https://github.com/middlewares/debugbar/issues/12
